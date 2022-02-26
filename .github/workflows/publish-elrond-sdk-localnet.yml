@@ -1,0 +1,4 @@
+name: Build & publish docker image "elrond-sdk-localnet"
+
+on:
+  workflow_dispatch:

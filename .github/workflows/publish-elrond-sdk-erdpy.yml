@@ -1,0 +1,4 @@
+name: Build & publish docker image "elrond-sdk-erdpy"
+
+on:
+  workflow_dispatch:
