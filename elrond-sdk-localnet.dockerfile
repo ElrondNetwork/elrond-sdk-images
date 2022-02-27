@@ -1,3 +1,3 @@
-FROM elrond-sdk-erdpy:latest
+FROM elrondnetwork/elrond-sdk-erdpy:latest
 
 # TBD
