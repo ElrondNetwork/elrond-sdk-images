@@ -28,4 +28,4 @@ jobs:
           context: .
           push: true
           file: ./elrond-sdk-erdpy.dockerfile
-          tags: elrondnetwork/elrond-sdk-erdpy:latest,elrondnetwork/elrond-sdk-erdpy:${DockerTag}
+          tags: elrondnetwork/elrond-sdk-erdpy:latest,elrondnetwork/elrond-sdk-erdpy:${{ github.event.inputs.DockerTag }}
