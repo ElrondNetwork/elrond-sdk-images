@@ -4,7 +4,7 @@ RUN apt-get update && apt-get install wget -y
 RUN apt-get update && apt-get install python3.8 python3.8-venv python3-venv -y
 RUN apt-get update && apt-get install git -y
 RUN apt-get update && apt-get install build-essential -y
-RUN groupadd -r elrond && useradd --no-log-init -m -g elrond elrond
+RUN groupadd -r elrond && useradd --no-log-init --uid 1001 -m -g elrond elrond
 USER elrond:elrond
 WORKDIR /home/elrond
 RUN wget -O erdpy-up.py https://raw.githubusercontent.com/ElrondNetwork/elrond-sdk-erdpy/master/erdpy-up.py
