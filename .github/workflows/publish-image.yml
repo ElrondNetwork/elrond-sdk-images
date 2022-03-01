@@ -1,12 +1,17 @@
-name: Build & publish docker image "elrond-sdk-erdpy"
+name: Build & publish image
 
 on:
   workflow_dispatch:
     inputs:
-      DockerTag:
-        description: "Docker Tag"
-        required: true
-        default: "latest"
+      image:
+        type: choice
+        description: Image (with tag)
+        options: 
+        - elrond-sdk-erdpy:frozen-001
+        - elrond-sdk-erdpy:latest
+        - elrond-sdk-erdpy-rust:frozen-001
+        - elrond-sdk-erdpy-rust:latest
+        - elrond-sdk-localnet:latest
 
 jobs:
   push_to_registry:
@@ -27,5 +32,5 @@ jobs:
         with:
           context: .
           push: true
-          file: ./elrond-sdk-erdpy.dockerfile
-          tags: elrondnetwork/elrond-sdk-erdpy:latest,elrondnetwork/elrond-sdk-erdpy:${{ github.event.inputs.DockerTag }}
+          file: ./${{ github.event.inputs.image }}.dockerfile
+          tags: ${{ github.event.inputs.image }}
