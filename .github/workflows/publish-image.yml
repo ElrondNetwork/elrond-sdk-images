@@ -33,4 +33,4 @@ jobs:
           context: .
           push: true
           file: ./${{ github.event.inputs.image }}.dockerfile
-          tags: ${{ github.event.inputs.image }}
+          tags: elrondnetwork/${{ github.event.inputs.image }}
