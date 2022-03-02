@@ -7,11 +7,10 @@ on:
         type: choice
         description: Image (with tag)
         options: 
-        - elrond-sdk-erdpy:frozen-001
         - elrond-sdk-erdpy:latest
+        - elrond-sdk-localnet:latest
         - elrond-sdk-erdpy-rust:frozen-001
         - elrond-sdk-erdpy-rust:latest
-        - elrond-sdk-localnet:latest
 
 jobs:
   push_to_registry:

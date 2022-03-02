@@ -1,16 +1,36 @@
-FROM elrondnetwork/elrond-sdk-erdpy:frozen-001
+# ===== FIRST STAGE ======
+FROM ubuntu:18.04 as builder
 
+RUN apt-get update && apt-get install wget -y
+RUN apt-get update && apt-get install python3.8 python3.8-venv python3-venv -y
+RUN groupadd -r elrond && useradd --no-log-init --uid 1001 -m -g elrond elrond
+USER elrond:elrond
+WORKDIR /home/elrond
+RUN wget -O erdpy-up.py https://raw.githubusercontent.com/ElrondNetwork/elrond-sdk-erdpy/master/erdpy-up.py
+RUN python3.8 ~/erdpy-up.py --exact-version=1.0.25
+ENV PATH="/home/elrond/elrondsdk:${PATH}"
+RUN erdpy deps install rust --tag="nightly-2022-02-26"
+RUN erdpy deps install nodejs --tag="v12.18.3"
+RUN erdpy deps install wasm-opt --tag="1.3.0"
+RUN rm -rf ~/elrondsdk/*.tar.gz
+RUN rm ~/erdpy-up.py
+
+# ===== SECOND STAGE ======
+FROM ubuntu:18.04
+
+USER root
+RUN apt-get update && apt-get install build-essential -y
+RUN apt-get update && apt-get install git -y
+RUN apt-get update && apt-get install python3.8 python3.8-venv python3-venv -y
+
+USER elrond:elrond
+WORKDIR /home/elrond
+COPY --from=builder --chown=elrond:elrond /home/elrond/elrondsdk /home/elrond/elrondsdk
+ENV PATH="/home/elrond/elrondsdk:${PATH}"
+
+LABEL frozen="yes"
+LABEL erdpy="1.0.25"
 LABEL rust="nightly-2022-02-26"
 LABEL wasm-opt="v1.3.0"
 LABEL wasm-opt-binaryen="version_105"
 LABEL nodejs="v12.18.3"
-LABEL vmtools="v1.4.42"
-
-USER elrond:elrond
-RUN erdpy deps install rust --tag="nightly-2022-02-26" && rm -f ~/elrondsdk/*.tar.gz
-RUN erdpy deps install nodejs --tag="v12.18.3" && rm -f ~/elrondsdk/*.tar.gz
-RUN erdpy deps install wasm-opt --tag="1.3.0" && rm -f ~/elrondsdk/*.tar.gz
-RUN erdpy deps install vmtools --tag="v1.4.42" && rm -f ~/elrondsdk/*.tar.gz
-USER root
-RUN rm -rf ~/elrondsdk/golang
-USER elrond:elrond

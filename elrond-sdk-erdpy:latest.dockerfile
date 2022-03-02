@@ -13,9 +13,6 @@ RUN rm ~/erdpy-up.py
 # ===== SECOND STAGE ======
 FROM ubuntu:18.04
 
-LABEL frozen="no"
-
-# Most derived images will require: git, build-essential.
 RUN apt-get update && apt-get install build-essential -y
 RUN apt-get update && apt-get install git -y
 RUN apt-get update && apt-get install python3.8 python3.8-venv python3-venv -y
@@ -24,3 +21,5 @@ USER elrond:elrond
 WORKDIR /home/elrond
 COPY --from=builder --chown=elrond:elrond /home/elrond/elrondsdk /home/elrond/elrondsdk
 ENV PATH="/home/elrond/elrondsdk:${PATH}"
+
+LABEL frozen="no"
