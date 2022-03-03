@@ -1,11 +1,32 @@
-FROM elrondnetwork/elrond-sdk-erdpy:latest
+# ===== FIRST STAGE ======
+FROM ubuntu:18.04 as builder
 
+RUN apt-get update && apt-get install wget -y
+RUN apt-get update && apt-get install python3.8 python3.8-venv python3-venv -y
+RUN groupadd -r elrond && useradd --no-log-init --uid 1001 -m -g elrond elrond
 USER elrond:elrond
-RUN erdpy deps install rust && rm -f ~/elrondsdk/*.tar.gz
-RUN erdpy deps install nodejs && rm -f ~/elrondsdk/*.tar.gz
-RUN erdpy deps install wasm-opt && rm -f ~/elrondsdk/*.tar.gz
-RUN erdpy deps install vmtools && rm -f ~/elrondsdk/*.tar.gz
-USER root
-# TODO: Run this command after installing "vmtools" in order to reduce the size of the image (or use a "builder").
-RUN rm -rf ~/elrondsdk/golang
+WORKDIR /home/elrond
+RUN wget -O erdpy-up.py https://raw.githubusercontent.com/ElrondNetwork/elrond-sdk-erdpy/master/erdpy-up.py
+RUN python3.8 ~/erdpy-up.py
+ENV PATH="/home/elrond/elrondsdk:${PATH}"
+RUN erdpy deps install rust
+RUN erdpy deps install nodejs
+RUN erdpy deps install wasm-opt
+RUN rm -rf ~/elrondsdk/*.tar.gz
+RUN rm ~/erdpy-up.py
+
+# ===== SECOND STAGE ======
+FROM ubuntu:18.04
+
+RUN apt-get update && apt-get install build-essential -y
+RUN apt-get update && apt-get install git -y
+RUN apt-get update && apt-get install python3.8 python3.8-venv python3-venv -y
+
+RUN groupadd -r elrond && useradd --no-log-init --uid 1001 -m -g elrond elrond
 USER elrond:elrond
+WORKDIR /home/elrond
+
+COPY --from=builder --chown=elrond:elrond /home/elrond/elrondsdk /home/elrond/elrondsdk
+ENV PATH="/home/elrond/elrondsdk:${PATH}"
+
+LABEL frozen="no"
