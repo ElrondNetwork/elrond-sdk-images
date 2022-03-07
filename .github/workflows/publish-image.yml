@@ -9,7 +9,6 @@ on:
         options: 
         - elrond-sdk-erdpy:latest
         - elrond-sdk-localnet:latest
-        - elrond-sdk-erdpy-rust:frozen-001
         - elrond-sdk-erdpy-rust:latest
 
 jobs:
