@@ -9,6 +9,7 @@ on:
         options: 
         - elrond-sdk-erdpy-rust:frozen-001
         - elrond-sdk-erdpy-rust:frozen-002
+        - elrond-sdk-erdpy-rust:frozen-003
         
 jobs:
   push_to_registry:
