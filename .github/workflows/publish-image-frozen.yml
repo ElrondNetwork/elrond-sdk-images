@@ -10,6 +10,7 @@ on:
         - elrond-sdk-erdpy-rust:frozen-001
         - elrond-sdk-erdpy-rust:frozen-002
         - elrond-sdk-erdpy-rust:frozen-003
+        - elrond-sdk-erdpy-rust:frozen-004
         
 jobs:
   push_to_registry:
