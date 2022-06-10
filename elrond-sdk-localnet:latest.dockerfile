@@ -8,4 +8,4 @@ RUN erdpy testnet prerequisites && erdpy testnet config
 COPY --chown=elrond:elrond ./elrond-sdk-localnet-config/testnet.toml /home/elrond/elrondsdk
 
 EXPOSE 7950
-CMD ["erdpy", "testnet", "start"]
+CMD ["/bin/bash"]
